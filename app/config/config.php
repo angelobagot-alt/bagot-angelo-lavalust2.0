@@ -1,5 +1,6 @@
 <?php
 defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
+
 /**
  * ------------------------------------------------------------------
  * LavaLust - an opensource lightweight PHP MVC Framework
@@ -79,8 +80,7 @@ $config['environment'] = getenv('APP_ENV') ?: 'development';
 | WARNING: You MUST set this value!
 |
 */
-$config['base_url'] 				= '';
-
+$config['base_url'] = 'http://127.0.0.1:8080/';
 /*
 |--------------------------------------------------------------------------
 | Static File Proxies
@@ -99,7 +99,7 @@ $config['proxy_enabled']           = FALSE;
 | variable to blank.
 |
 */
-$config['index_page']               = 'index.php';
+$config['index_page']               = '';
 
 /*
 |--------------------------------------------------------------------------
@@ -348,4 +348,9 @@ $config['csrf_token_name']         = 'csrf_test_name';
 $config['csrf_cookie_name']        = 'csrf_cookie_name';
 $config['csrf_expire']             = 7200;
 $config['csrf_regenerate']         = FALSE;
+
+require_once __DIR__ . '/middleware.php';
 ?>
+
+
+    
