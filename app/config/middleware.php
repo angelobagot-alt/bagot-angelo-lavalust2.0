@@ -2,6 +2,7 @@
 defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 require_once APP_DIR . 'middlewares/StudentMiddleware.php';
 require_once APP_DIR . 'middlewares/AuthMiddleware.php';
+require_once APP_DIR . 'middlewares/AdminMiddleware.php';
 /**
  * ------------------------------------------------------------------
  * LavaLust - an opensource lightweight PHP MVC Framework
@@ -46,4 +47,5 @@ require_once APP_DIR . 'middlewares/AuthMiddleware.php';
 $config['middlewares'] = [
     'student_access' => new StudentMiddleware(),
     'auth' => new AuthMiddleware(),
+    'admin' => new AdminMiddleware(),
 ];

@@ -14,9 +14,9 @@ class AuthController extends Controller
         }
         $data = [
             'error' => $_SESSION['flash_error'] ?? '',
-            'email' => $_SESSION['login_email'] ?? '',
+            'identity' => $_SESSION['login_identity'] ?? '',
         ];
-        unset($_SESSION['flash_error'], $_SESSION['login_email']);
+        unset($_SESSION['flash_error'], $_SESSION['login_identity']);
         $this->call->view('login', $data);
     }
 
@@ -25,23 +25,32 @@ class AuthController extends Controller
         if (session_status() !== PHP_SESSION_ACTIVE) {
             session_start();
         }
-        $email = trim((string) $this->request->post('email'));
+        $identity = trim((string) $this->request->post('identity'));
         $password = (string) $this->request->post('password');
         $configuredEmail = getenv('ADMIN_EMAIL') ?: 'admin@example.com';
         $configuredHash = getenv('ADMIN_PASSWORD_HASH');
         $configuredPassword = getenv('ADMIN_PASSWORD');
-        $validPassword = $configuredHash
+        $adminPasswordValid = $configuredHash
             ? password_verify($password, $configuredHash)
-            : ($configuredPassword ? hash_equals($configuredPassword, $password) : $password === 'ChangeMe123!');
+            : ($configuredPassword ? hash_equals($configuredPassword, $password) : $password === 'admin123');
+        $viewerUsername = getenv('VIEWER_USERNAME') ?: 'viewer';
+        $viewerPassword = getenv('VIEWER_PASSWORD') ?: 'viewer123';
 
-        if (hash_equals($configuredEmail, $email) && $validPassword) {
+        if (hash_equals($configuredEmail, $identity) && $adminPasswordValid) {
             session_regenerate_id(true);
-            $_SESSION['auth_user'] = ['email' => $email];
+            $_SESSION['auth_user'] = ['identity' => $identity, 'role' => 'admin'];
+            redirect('products');
+            return;
+        }
+
+        if (hash_equals($viewerUsername, $identity) && hash_equals($viewerPassword, $password)) {
+            session_regenerate_id(true);
+            $_SESSION['auth_user'] = ['identity' => $identity, 'role' => 'viewer'];
             redirect('products');
             return;
         }
         $_SESSION['flash_error'] = 'The email or password is incorrect.';
-        $_SESSION['login_email'] = $email;
+        $_SESSION['login_identity'] = $identity;
         redirect('login');
     }
 

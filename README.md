@@ -18,6 +18,8 @@ Run `database/products.sql` once in the Aiven MySQL SQL console. Set these Rende
 APP_URL=https://your-render-service.onrender.com/
 ADMIN_EMAIL=admin@example.com
 ADMIN_PASSWORD_HASH=<password_hash>
+VIEWER_USERNAME=viewer
+VIEWER_PASSWORD=viewer123
 DB_HOST=<aiven-host>
 DB_PORT=<aiven-port>
 DB_USER=<aiven-user>
@@ -26,6 +28,8 @@ DB_NAME=defaultdb
 ```
 
 Generate a password hash locally with `php -r "echo password_hash('your-password', PASSWORD_DEFAULT), PHP_EOL;"`.
+
+The administrator can create, edit, and delete products. The `viewer` account can only read the product list.
 # LavaLust Framework
 
 > A lightweight, fast PHP framework built for developers who want clean MVC architecture without unnecessary complexity or performance overhead.

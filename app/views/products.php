@@ -2,6 +2,7 @@
 defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 $products = $products ?? [];
 $flash = $flash ?? '';
+$isAdmin = ($_SESSION['auth_user']['role'] ?? '') === 'admin';
 $esc = static fn ($value) => htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
 ?>
 <!DOCTYPE html>
@@ -49,12 +50,12 @@ $esc = static fn ($value) => htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-
 <body>
     <header>
         <div class="brand"><span class="mark">S</span> Stockroom</div>
-        <div class="userbar"><span><?= $esc($_SESSION['auth_user']['email'] ?? 'Authenticated user') ?></span><form method="post" action="<?= site_url('logout') ?>"><button class="logout" type="submit">Sign out</button></form></div>
+        <div class="userbar"><span><?= $esc($_SESSION['auth_user']['identity'] ?? 'Authenticated user') ?> · <?= $isAdmin ? 'Administrator' : 'Read only' ?></span><form method="post" action="<?= site_url('logout') ?>"><button class="logout" type="submit">Sign out</button></form></div>
     </header>
     <main>
         <div class="heading">
             <div><p class="eyebrow">Inventory / Products</p><h1>Product management</h1><p class="subtle">Keep your catalog accurate and ready to ship.</p></div>
-            <a class="primary" href="<?= site_url('products/create') ?>"><span>+</span> Add product</a>
+            <?php if ($isAdmin): ?><a class="primary" href="<?= site_url('products/create') ?>"><span>+</span> Add product</a><?php endif; ?>
         </div>
         <?php if ($flash): ?><div class="alert" role="status"><?= $esc($flash) ?></div><?php endif; ?>
         <div class="table-wrap">
@@ -64,7 +65,7 @@ $esc = static fn ($value) => htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-
                 <?php if (!$products): ?><tr><td class="empty" colspan="5">No products yet. Add your first item to begin.</td></tr>
                 <?php else: foreach ($products as $product): ?>
                     <?php $id = is_array($product) ? ($product['id'] ?? '') : ($product->id ?? ''); $name = is_array($product) ? ($product['product_name'] ?? '') : ($product->product_name ?? ''); $description = is_array($product) ? ($product['description'] ?? '') : ($product->description ?? ''); $price = is_array($product) ? ($product['price'] ?? 0) : ($product->price ?? 0); $quantity = is_array($product) ? ($product['quantity'] ?? 0) : ($product->quantity ?? 0); ?>
-                    <tr><td class="name"><?= $esc($name) ?></td><td class="description"><?= $esc($description) ?></td><td class="price">$<?= number_format((float) $price, 2) ?></td><td><span class="stock"><?= $esc($quantity) ?></span></td><td><div class="actions"><a class="action" href="<?= site_url('products/edit/' . (int) $id) ?>">Edit</a><form method="post" action="<?= site_url('products/delete/' . (int) $id) ?>" onsubmit="return confirm('Delete this product?');"><button class="action delete" type="submit">Delete</button></form></div></td></tr>
+                    <tr><td class="name"><?= $esc($name) ?></td><td class="description"><?= $esc($description) ?></td><td class="price">$<?= number_format((float) $price, 2) ?></td><td><span class="stock"><?= $esc($quantity) ?></span></td><td><?php if ($isAdmin): ?><div class="actions"><a class="action" href="<?= site_url('products/edit/' . (int) $id) ?>">Edit</a><form method="post" action="<?= site_url('products/delete/' . (int) $id) ?>" onsubmit="return confirm('Delete this product?');"><button class="action delete" type="submit">Delete</button></form></div><?php else: ?><span class="action">View only</span><?php endif; ?></td></tr>
                 <?php endforeach; endif; ?>
                 </tbody>
             </table>

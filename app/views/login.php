@@ -1,7 +1,7 @@
 <?php
 defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 $error = $error ?? '';
-$email = $email ?? '';
+$identity = $identity ?? '';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,8 +36,8 @@ $email = $email ?? '';
             <p class="subtle">Sign in to manage your product inventory.</p>
             <?php if ($error): ?><div class="alert" role="alert"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></div><?php endif; ?>
             <form method="post" action="<?= site_url('login') ?>">
-                <label for="email">Email address</label>
-                <input id="email" name="email" type="email" value="<?= htmlspecialchars($email, ENT_QUOTES, 'UTF-8') ?>" placeholder="admin@example.com" required autofocus>
+                <label for="identity">Email or username</label>
+                <input id="identity" name="identity" type="text" value="<?= htmlspecialchars($identity, ENT_QUOTES, 'UTF-8') ?>" placeholder="admin@example.com or viewer" required autofocus>
                 <label for="password">Password</label>
                 <input id="password" name="password" type="password" placeholder="Your password" required>
                 <button type="submit">Sign in</button>
