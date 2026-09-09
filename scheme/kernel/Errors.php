@@ -75,7 +75,10 @@ class Errors
 			$template_path = APP_DIR . 'views/errors/';
 		}
 
-		http_response_code($code);
+		if (!headers_sent())
+		{
+			http_response_code($code);
+		}
 		require_once($template_path.$template.'.php');
 		exit();
 	}
