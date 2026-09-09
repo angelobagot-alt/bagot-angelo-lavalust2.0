@@ -44,8 +44,17 @@ defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 */
 /** @var object $router **/
 
-$router->get('/', 'Welcome::index');
+$router->get('/', 'AuthController::login');
 $router->get('/student', 'StudentController::index');
 $router->get('/student/profile', 'StudentController::profile')->middleware('student_access');
 $router->get('/student/grant_access', 'StudentController::grant_access');
 $router->get('/users', 'UsersController::index');
+$router->get('/login', 'AuthController::login');
+$router->post('/login', 'AuthController::authenticate');
+$router->post('/logout', 'AuthController::logout');
+$router->get('/products', 'ProductsController::index')->middleware('auth');
+$router->get('/products/create', 'ProductsController::create')->middleware('auth');
+$router->post('/products', 'ProductsController::store')->middleware('auth');
+$router->get('/products/edit/{id}', 'ProductsController::edit')->where('id', '[0-9]+')->middleware('auth');
+$router->post('/products/edit/{id}', 'ProductsController::update')->where('id', '[0-9]+')->middleware('auth');
+$router->post('/products/delete/{id}', 'ProductsController::delete')->where('id', '[0-9]+')->middleware('auth');

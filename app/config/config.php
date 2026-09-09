@@ -81,7 +81,10 @@ $config['environment'] = getenv('APP_ENV') ?: 'development';
 | WARNING: You MUST set this value!
 |
 */
-$config['base_url'] = 'http://127.0.0.1:8080/';
+$forwardedProto = $_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '';
+$requestProto = $forwardedProto ?: ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http');
+$requestHost = $_SERVER['HTTP_HOST'] ?? '127.0.0.1:8080';
+$config['base_url'] = rtrim(getenv('APP_URL') ?: $requestProto . '://' . $requestHost, '/') . '/';
 /*
 |--------------------------------------------------------------------------
 | Static File Proxies

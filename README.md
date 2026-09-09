@@ -1,3 +1,31 @@
+# Stockroom Product CRUD
+
+Authenticated product management built with LavaLust, Aiven MySQL, and Render.
+
+## Routes
+
+- `/login` signs users in with the configured admin credentials.
+- `/products` lists products and is protected by authentication.
+- `/products/create` adds a product.
+- `/products/edit/{id}` edits a product.
+- `/products/delete/{id}` deletes a product.
+
+## Aiven setup
+
+Run `database/products.sql` once in the Aiven MySQL SQL console. Set these Render environment variables without committing them to GitHub:
+
+```text
+APP_URL=https://your-render-service.onrender.com/
+ADMIN_EMAIL=admin@example.com
+ADMIN_PASSWORD_HASH=<password_hash>
+DB_HOST=<aiven-host>
+DB_PORT=<aiven-port>
+DB_USER=<aiven-user>
+DB_PASSWORD=<aiven-password>
+DB_NAME=defaultdb
+```
+
+Generate a password hash locally with `php -r "echo password_hash('your-password', PASSWORD_DEFAULT), PHP_EOL;"`.
 # LavaLust Framework
 
 > A lightweight, fast PHP framework built for developers who want clean MVC architecture without unnecessary complexity or performance overhead.
